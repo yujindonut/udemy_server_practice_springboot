@@ -82,7 +82,12 @@ public class UserDao {
         return this.jdbcTemplate.update(modifyUserNameQuery,modifyUserNameParams);
     }
 
-
+    // Delete User
+    public int deleteUser(int userId) {
+        String deleteUserByIdQuery = "delete from User where userIdx = ?";
+        int deleteUsersByIdParams = userId;
+        return this.jdbcTemplate.update(deleteUserByIdQuery,deleteUsersByIdParams);
+    }
 
 
 }

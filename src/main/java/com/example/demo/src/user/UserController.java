@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import static com.example.demo.config.BaseResponseStatus.POST_USERS_EMPTY_EMAIL;
-import static com.example.demo.config.BaseResponseStatus.POST_USERS_INVALID_EMAIL;
+import static com.example.demo.config.BaseResponseStatus.*;
 import static com.example.demo.utils.ValidationRegex.isRegexEmail;
+import static sun.misc.Version.print;
 
 @RestController
 @RequestMapping("/users")
@@ -74,7 +74,19 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
-
+    @ResponseBody
+    @DeleteMapping("/delete/{userIdx}") // (GET) 127.0.0.1:9000/users/:userIdx
+    public BaseResponse<Object> deleteUserByIdx(@PathVariable("userIdx")int userIdx) {
+        try{
+            if(userProvider.getUsersByIdx(userIdx) == null){
+                return new BaseResponse<>(USERS_EMPTY_USER_ID);
+            }
+            userProvider.deleteUser(userIdx);
+            return new BaseResponse<>(userProvider.deleteUser(userIdx));
+        } catch (BaseException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
      * 회원가입 API
      * [POST] /users

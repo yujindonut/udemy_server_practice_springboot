@@ -58,6 +58,12 @@ public class UserProvider {
         }
     }
 
-
+    public int deleteUser(int userIdx) throws BaseException{
+        try{
+            return userDao.deleteUser(userIdx);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 
 }
