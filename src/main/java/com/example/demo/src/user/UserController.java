@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.example.demo.config.BaseResponseStatus.*;
 import static com.example.demo.utils.ValidationRegex.isRegexEmail;
-import static sun.misc.Version.print;
 
 @RestController
 @RequestMapping("/users")
@@ -25,16 +24,11 @@ public class UserController {
     @Autowired
     private final JwtService jwtService;
 
-
-
-
     public UserController(UserProvider userProvider, UserService userService, JwtService jwtService){
         this.userProvider = userProvider;
         this.userService = userService;
         this.jwtService = jwtService;
     }
-
-
 
     /**
      * 회원 조회 API
@@ -62,12 +56,22 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+    //Query String
+    @ResponseBody
+    @GetMapping("/feed/{userIdx}") // (GET) 127.0.0.1:9000/users
+    public BaseResponse<GetUserFeedRes> getUserFeed(@PathVariable("userIdx")int userIdx) {
+        try{
+            GetUserFeedRes getUserFeedRes = userProvider.retrieveUserFeed(userIdx, userIdx);
+            return new BaseResponse<>(getUserFeedRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
     @ResponseBody
     @GetMapping("/{userIdx}") // (GET) 127.0.0.1:9000/users/:userIdx
     public BaseResponse<GetUserRes> getUserByIdx(@PathVariable("userIdx")int userIdx) {
         try{
-
             GetUserRes getUsersRes = userProvider.getUsersByIdx(userIdx);
             return new BaseResponse<>(getUsersRes);
         } catch(BaseException exception){
