@@ -64,7 +64,7 @@ public class PostDao {
                         rs.getString("updatedAt"),
                         rs.getString("likeOrNot"),
                         getPostImgRes = this.jdbcTemplate.query("SELECT pi.postImgUrlIdx, pi.imgUrl + \n" +
-                                "FROM PostImgUrl as pi\n" + "join Post as p on p.postIdx = pi.postIdx \n" +
+                                "FROM PostImgUrl as pi \n" + "join Post as p on p.postIdx = pi.postIdx \n" +
                                 "WHERE pi.status = 'ACTIVE' and p.postIdx = ?;",
                                 (rk, rownum)-> new GetPostImgRes(
                                         rk.getInt("postImgUrlIdx"),
