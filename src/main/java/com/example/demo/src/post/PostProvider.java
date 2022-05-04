@@ -17,6 +17,7 @@ import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
 import static com.example.demo.config.BaseResponseStatus.USERS_EMPTY_USER_ID;
+import static sun.misc.Version.print;
 
 //Provider : Read의 비즈니스 로직 처리
 @Service
@@ -34,25 +35,63 @@ public class PostProvider {
         this.jwtService = jwtService;
     }
 
-    public List<GetPostsRes> retrievePosts(int userIdx) throws BaseException{
-        Boolean isMyFeed = true;
+    //게시물 리스트 조회
+    public List<GetPostsRes> retrievePosts(int userIdx) throws BaseException {
 
-        if(checkUserExits(userIdx) == 0){
+        if(checkUserExist(userIdx) ==0){
             throw new BaseException(USERS_EMPTY_USER_ID);
         }
+
         try{
+
             List<GetPostsRes> getPosts = postDao.selectPosts(userIdx);
+
             return getPosts;
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
         }
-        catch (Exception exception) {
+    }
+    // 유저 확인
+    public int checkUserExist(int userIdx) throws BaseException{
+        try{
+            return postDao.checkUserExist(userIdx);
+        } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
-    public int checkUserExits(int userIdx) throws BaseException {
-        try {
-            return postDao.checkUserExist(userIdx);
-        } catch (Exception exception) {
+    // 게시물 확인
+    public int checkPostExist(int postIdx) throws BaseException{
+        try{
+            return postDao.checkPostExist(postIdx);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    // 유저의 게시물인지 확인
+    public int checkUserPostExist(int userIdx,int postIdx) throws BaseException{
+        try{
+            return postDao.checkUserPostExist(userIdx,postIdx);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    // 이메일 확인
+    public int checkEmailExist(String email) throws BaseException{
+        try{
+            return postDao.checkEmailExist(email);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    // 이메일 확인
+    public String checkUserStatus(String email) throws BaseException{
+        try{
+            return postDao.checkUserStatus(email);
+        } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
     }
