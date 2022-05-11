@@ -22,10 +22,6 @@ public class PostDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-
-
-
-
     // 유저 확인
     public int checkUserExist(int userIdx){
         String checkUserExistQuery = "select exists(select userIdx from User where userIdx = ?)";
@@ -43,7 +39,6 @@ public class PostDao {
         return this.jdbcTemplate.queryForObject(checkPostExistQuery,
                 int.class,
                 checkPostExistParams);
-
     }
 
     // 이메일 확인

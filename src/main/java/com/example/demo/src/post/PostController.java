@@ -3,6 +3,9 @@ package com.example.demo.src.post;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.post.model.GetPostsRes;
+import com.example.demo.src.post.model.PatchPostReq;
+import com.example.demo.src.post.model.PostPostReq;
+import com.example.demo.src.post.model.PostPostRes;
 import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
@@ -44,5 +47,46 @@ public class PostController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
-
+    @ResponseBody
+    @PostMapping("")
+    public BaseResponse<PostPostRes> createPosts(@RequestBody PostPostReq postPostReq) {
+        try{
+            if(postPostReq.getContent().length()>450){
+                return new BaseResponse<>(POST_POSTS_INVALID_CONTENTS);
+            }
+            if(postPostReq.getPostImgsUrl().size()<1){
+                return new BaseResponse<>(POST_POSTS_EMPTY_IMGURL);
+            }
+            PostPostRes postPostRes = postService.createPost(postPostReq.getUserIdx(),postPostReq);
+            return new BaseResponse<>(postPostRes);
+        } catch(BaseException exception)
+        {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    @ResponseBody
+    @PatchMapping("/{postIdx}")
+    public BaseResponse<String> modifyPosts(@PathVariable ("postIdx") int postIdx, @RequestBody PatchPostReq patchPostsReq) {
+        try{
+            if(patchPostsReq.getContent().length()>450){
+                return new BaseResponse<>(POST_POSTS_INVALID_CONTENTS);
+            }
+            postService.modifyPost(patchPostsReq.getUserIdx(),postIdx, patchPostsReq);
+            String result = "게시물 정보 수정을 완료하였습니다.";
+            return new BaseResponse<>(result);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    @ResponseBody
+    @PatchMapping("/{postIdx}/status")
+    public BaseResponse<String> deletePost(@PathVariable ("postIdx") int postIdx) {
+        try{
+            postService.deletePost(postIdx);
+            String result = "게시물 삭제를 성공했습니다.";
+            return new BaseResponse<>(result);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }

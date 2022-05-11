@@ -3,10 +3,6 @@ package com.example.demo.src.post;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.post.model.GetPostsRes;
-import com.example.demo.src.user.model.GetUserFeedRes;
-import com.example.demo.src.user.model.GetUserInfoRes;
-import com.example.demo.src.user.model.GetUserPostsRes;
-import com.example.demo.src.user.model.GetUserRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +13,6 @@ import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
 import static com.example.demo.config.BaseResponseStatus.USERS_EMPTY_USER_ID;
-import static sun.misc.Version.print;
 
 //Provider : Read의 비즈니스 로직 처리
 @Service
@@ -41,9 +36,7 @@ public class PostProvider {
         if(checkUserExist(userIdx) ==0){
             throw new BaseException(USERS_EMPTY_USER_ID);
         }
-
         try{
-
             List<GetPostsRes> getPosts = postDao.selectPosts(userIdx);
 
             return getPosts;
