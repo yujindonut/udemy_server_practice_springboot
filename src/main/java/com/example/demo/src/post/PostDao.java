@@ -22,6 +22,10 @@ public class PostDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+
+
+
+
     // 유저 확인
     public int checkUserExist(int userIdx){
         String checkUserExistQuery = "select exists(select userIdx from User where userIdx = ?)";
@@ -39,6 +43,7 @@ public class PostDao {
         return this.jdbcTemplate.queryForObject(checkPostExistQuery,
                 int.class,
                 checkPostExistParams);
+
     }
 
     // 이메일 확인
@@ -79,7 +84,7 @@ public class PostDao {
                 "            left join (select postIdx, count(commentIdx) as commentCount from Comment WHERE status = 'ACTIVE' group by postIdx) c on c.postIdx = p.postIdx\n" +
                 "            left join Follow as f on f.followeeIdx = p.userIdx and f.status = 'ACTIVE'\n" +
                 "            left join PostLike as pl on pl.userIdx = f.followerIdx and pl.postIdx = p.postIdx\n" +
-                "        WHERE  u.userIdx = ? and p.status = 'ACTIVE'\n" +
+                "        WHERE f.followerIdx = ? and p.status = 'ACTIVE'\n" +
                 "        group by p.postIdx;\n" ;
         int selectUserPostsParam = userIdx;
         return this.jdbcTemplate.query(selectUserPostsQuery,

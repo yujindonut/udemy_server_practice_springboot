@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="c637f86f-f5ec-4822-ac20-e241ebe0336f" name="ubuntu">
+        <fileTransfer rootFolder="/var/www/udemy_server_practice_springboot" accessType="SFTP" host="52.78.151.88" port="22" sshConfigId="a3090ee0-a6b2-45f3-b766-b1c93210b30f" sshConfig="ubuntu@52.78.151.88:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
