@@ -36,6 +36,7 @@ public class PostService {
 
         try{
             int postIdx = postDao.insertPost(userIdx, postPostReq);
+            System.out.println("postIdx:" + postIdx);
             for(int i=0; i< postPostReq.getPostImgsUrl().size(); i++) {
                 postDao.insertPostImgs(postIdx, postPostReq.getPostImgsUrl().get(i));
             }

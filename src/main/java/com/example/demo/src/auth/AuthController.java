@@ -2,6 +2,8 @@ package com.example.demo.src.auth;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
+import com.example.demo.src.auth.model.GetAutoLoginReq;
+import com.example.demo.src.auth.model.GetAutoLoginRes;
 import com.example.demo.src.auth.model.PostLoginReq;
 import com.example.demo.src.auth.model.PostLoginRes;
 import com.example.demo.utils.JwtService;
@@ -56,29 +58,37 @@ public class AuthController {
         }
     }
 
-//   @ResponseBody
-//    @GetMapping("/jwt")
-//    public BaseResponse<GetAutoLoginRes> autologin() throws BaseException{
-//        try{
+   @ResponseBody
+    @PostMapping("/autoLogin")
+    public BaseResponse<GetAutoLoginRes> autologin(@RequestBody GetAutoLoginReq getAutoLoginReq) throws BaseException{
+        try{
 //            if(jwtService.getJwt()==null){
 //                return new BaseResponse<>(EMPTY_JWT);
 //            }
-////            else if(authProvider.checkJwt(jwtService.getJwt())==1){
-////                return new BaseResponse<>(INVALID_JWT);
-////
-////            }
+//            else if(jwtService.checkJwt(jwtService.getJwt())==1){
+//                return new BaseResponse<>(INVALID_JWT);
 //
-//            else{
-//                String jwt=jwtService.getJwt();
-//                int userIdx=jwtService.getUserIdx();
-//                GetAutoLoginRes getAutoRes = userProvider.getAuto(jwt,userIdx);
-//                return new BaseResponse<>(getAutoRes);
 //            }
-//
-//        }catch(BaseException exception){
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//
-//    }
+            //이메일 검증
+            if (getAutoLoginReq.getEmail() == null) {
+                return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            }
+            if (getAutoLoginReq.getPassword() == null) {
+                return new BaseResponse<>(POST_USERS_EMPTY_PASSWORD);
+            }
+//            이메일 정규식 검증
+            if(!isRegexEmail(getAutoLoginReq.getEmail())){
+                return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
+            }
+            else{
+                GetAutoLoginRes getAutoRes = authService.getAutoLogin(getAutoLoginReq);
+                return new BaseResponse<>(getAutoRes);
+            }
+
+        }catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+
+    }
 
 }

@@ -36,6 +36,26 @@ public class AuthDao {
         );
     }
 
+    // 로그인
+    public User getAutoLogin(GetAutoLoginReq getAutoLoginReq){
+        String setAutoLoginQuery = "Update User SET checkAutoLogin = ? where email = ?";
+        Object[] setAutoLoginParams = new Object[]{getAutoLoginReq.getCheckAutoLogin(),getAutoLoginReq.getEmail()};
+        this.jdbcTemplate.update(setAutoLoginQuery, setAutoLoginParams);
+
+        String getAutoLoginQuery = "select userIdx, name, nickName, email, pwd from User where email = ?";
+        String getAutoLoginParams = getAutoLoginReq.getEmail();
+
+        return this.jdbcTemplate.queryForObject(getAutoLoginQuery,
+                (rs, rowNum) -> new User(
+                        rs.getInt("userIdx"),
+                        rs.getString("name"),
+                        rs.getString("nickName"),
+                        rs.getString("email"),
+                        rs.getString("pwd")
+                ),
+                getAutoLoginParams
+        );
+    }
     // 유저 확인
     public int checkUserExist(int userIdx){
         String checkUserExistQuery = "select exists(select userIdx from User where userIdx = ?)";

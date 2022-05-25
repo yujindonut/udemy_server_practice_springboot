@@ -48,4 +48,21 @@ public class AuthService {
             throw new BaseException(FAILED_TO_LOGIN);
         }
     }
+    public GetAutoLoginRes getAutoLogin(GetAutoLoginReq getAutoLoginReq) throws BaseException{
+        User user = authDao.getAutoLogin(getAutoLoginReq);
+        String encryptPwd;
+        try {
+            encryptPwd = new SHA256().encrypt(getAutoLoginReq.getPassword());
+        } catch (Exception ignored) {
+            throw new BaseException(PASSWORD_DECRYPTION_ERROR);
+        }
+        if(user.getPwd().equals(encryptPwd)){
+            int userIdx = authDao.getAutoLogin(getAutoLoginReq).getUserIdx();
+            String jwt = jwtService.createJwt(userIdx);
+            return new GetAutoLoginRes(userIdx,jwt);
+        }
+        else{
+            throw new BaseException(FAILED_TO_LOGIN);
+        }
+    }
 }

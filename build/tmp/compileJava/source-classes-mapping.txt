@@ -58,6 +58,8 @@ com/example/demo/src/user/model/DeleteUserRes.java
  com.example.demo.src.user.model.DeleteUserRes
 com/example/demo/src/user/model/User.java
  com.example.demo.src.user.model.User
+com/example/demo/src/auth/model/GetAutoLoginReq.java
+ com.example.demo.src.auth.model.GetAutoLoginReq
 com/example/demo/src/user/UserService.java
  com.example.demo.src.user.UserService
 com/example/demo/src/auth/model/PostLoginRes.java
